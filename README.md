@@ -118,7 +118,32 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser to inspect r
 
 ---
 
-## 6. How to Run
+## 6. Data & Pipeline Tracking with DVC and DagsHub
+
+The dataset and large binary assets are managed with **DVC (Data Version Control)** and hosted on **DagsHub**:
+- **GitHub Repository**: [https://github.com/Anamika-Thakur/BuildWatt](https://github.com/Anamika-Thakur/BuildWatt)
+- **DagsHub Repository**: [https://dagshub.com/Anamika-Thakur/BuildWatt](https://dagshub.com/Anamika-Thakur/BuildWatt)
+- **DVC Remote**: `https://dagshub.com/Anamika-Thakur/BuildWatt.dvc`
+
+### Pulling Tracked Data with DVC:
+```bash
+dvc pull
+```
+
+### Pushing Data Updates to DagsHub Storage:
+1. Log in to DagsHub via CLI (triggers one-click browser authorization):
+   ```bash
+   dagshub login
+   ```
+   *(Or authenticate DVC directly using your DagsHub token: `dvc remote modify origin --local user Anamika-Thakur` and `dvc remote modify origin --local password <YOUR_TOKEN>`)*
+2. Push tracked data:
+   ```bash
+   dvc push
+   ```
+
+---
+
+## 7. How to Run
 
 ### Run the Complete CLI Pipeline:
 ```bash
