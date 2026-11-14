@@ -120,26 +120,66 @@ Open [http://127.0.0.1:5000](http://127.0.0.1:5000) in your browser to inspect r
 
 ## 6. Data & Pipeline Tracking with DVC and DagsHub
 
-The dataset and large binary assets are managed with **DVC (Data Version Control)** and hosted on **DagsHub**:
+The dataset, pipeline stages, and experiment artifacts are managed with **DVC (Data Version Control)** and hosted on **DagsHub**:
 - **GitHub Repository**: [https://github.com/Anamika-Thakur/BuildWatt](https://github.com/Anamika-Thakur/BuildWatt)
 - **DagsHub Repository**: [https://dagshub.com/Anamika-Thakur/BuildWatt](https://dagshub.com/Anamika-Thakur/BuildWatt)
+- **DagsHub MLflow Server**: `https://dagshub.com/Anamika-Thakur/BuildWatt.mlflow`
 - **DVC Remote**: `https://dagshub.com/Anamika-Thakur/BuildWatt.dvc`
 
-### Pulling Tracked Data with DVC:
+### Interactive Workflow Visualization (DAG)
+The complete machine learning lifecycle is codified as a reproducible DVC pipeline (`dvc.yaml`):
+```
+  +-----------------------+  
+  | ENB2012_data.xlsx.dvc |  
+  +-----------------------+  
+              *              
+              *              
+         +---------+         
+         | prepare |         
+         +---------+         
+         **        **        
+       **            *       
+      *               **     
++-------+               *    
+| train |             **     
++-------+            *       
+         **        **        
+           **    **          
+             *  *            
+        +-----------+        
+        | calibrate |        
+        +-----------+        
+```
+On **DagsHub**, navigate to the **"Data Pipeline"** tab to view the live, interactive graph of this pipeline with linked stages, inputs, and outputs.
+
+### Running & Reproducing the Pipeline:
 ```bash
-dvc pull
+dvc repro
+```
+View pipeline summary metrics:
+```bash
+dvc metrics show
 ```
 
-### Pushing Data Updates to DagsHub Storage:
-1. Log in to DagsHub via CLI (triggers one-click browser authorization):
-   ```bash
-   dagshub login
-   ```
-   *(Or authenticate DVC directly using your DagsHub token: `dvc remote modify origin --local user Anamika-Thakur` and `dvc remote modify origin --local password <YOUR_TOKEN>`)*
-2. Push tracked data:
-   ```bash
-   dvc push
-   ```
+### Pulling & Pushing Tracked Data with DVC:
+```bash
+# Pull raw data from DagsHub
+dvc pull
+
+# Authenticate with DagsHub (browser OAuth)
+dagshub login
+
+# Push data to DagsHub remote
+dvc push
+```
+
+### Tracking Experiments to DagsHub MLflow:
+Set your DagsHub token or log in with `dagshub login`:
+```bash
+dagshub login
+python src/train.py
+```
+Experiments, metrics, and models will immediately appear under the **"Experiments"** tab on DagsHub!
 
 ---
 
