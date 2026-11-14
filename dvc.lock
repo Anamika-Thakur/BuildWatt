@@ -1,0 +1,104 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py --data-path ENB2012_data.xlsx --output-dir data
+    deps:
+    - path: ENB2012_data.xlsx
+      hash: md5
+      md5: a708d1e11eb6ffe4cf039e32f0bdbf64
+      size: 76189
+    - path: src/prepare.py
+      hash: md5
+      md5: 2849bfa09fa87e14ede5664b29401001
+      size: 2314
+    outs:
+    - path: data/cal.csv
+      hash: md5
+      md5: cb7230ab68e6aab6bc52a87798da34cd
+      size: 7544
+    - path: data/test.csv
+      hash: md5
+      md5: cf89a7ca23906b2d3479042e7acc52e0
+      size: 7544
+    - path: data/train.csv
+      hash: md5
+      md5: 80a38be27a8489c61d52e8db9ca865ce
+      size: 22272
+  train:
+    cmd: python src/train.py --train-path data/train.csv --test-path 
+      data/test.csv --artifacts-dir artifacts --models-dir models
+    deps:
+    - path: data/test.csv
+      hash: md5
+      md5: cf89a7ca23906b2d3479042e7acc52e0
+      size: 7544
+    - path: data/train.csv
+      hash: md5
+      md5: 80a38be27a8489c61d52e8db9ca865ce
+      size: 22272
+    - path: src/train.py
+      hash: md5
+      md5: 5cb93b598c349301487ea65a6a7e2bbe
+      size: 9979
+    outs:
+    - path: artifacts/benchmark_leaderboard.csv
+      hash: md5
+      md5: 781cde3550c2b4641c0f133a458d8ad3
+      size: 2444
+    - path: artifacts/metrics.json
+      hash: md5
+      md5: c2aad38d3477ad8382e6d203d5c06f74
+      size: 267
+    - path: artifacts/model_comparison_Cooling_Load.png
+      hash: md5
+      md5: b6d3b7fa66304dd87ecc269eda09b40a
+      size: 112965
+    - path: artifacts/model_comparison_Heating_Load.png
+      hash: md5
+      md5: c10a8f3a13bc0d8a39f70668db4ff21a
+      size: 112941
+    - path: models/champion_gbr_cool.joblib
+      hash: md5
+      md5: 06495e1f4b113a1e9766fb9ab931df92
+      size: 668412
+    - path: models/champion_gbr_heat.joblib
+      hash: md5
+      md5: ca46224bb8e42a3528db48bb3f892ac3
+      size: 670316
+  calibrate:
+    cmd: python src/calibrate.py --cal-path data/cal.csv --test-path 
+      data/test.csv --models-dir models --artifacts-dir artifacts
+    deps:
+    - path: data/cal.csv
+      hash: md5
+      md5: cb7230ab68e6aab6bc52a87798da34cd
+      size: 7544
+    - path: data/test.csv
+      hash: md5
+      md5: cf89a7ca23906b2d3479042e7acc52e0
+      size: 7544
+    - path: models/champion_gbr_heat.joblib
+      hash: md5
+      md5: ca46224bb8e42a3528db48bb3f892ac3
+      size: 670316
+    - path: src/calibrate.py
+      hash: md5
+      md5: 3e42aebc553825c506e784c935b7d2c1
+      size: 6999
+    outs:
+    - path: artifacts/calibration_curve_metrics.csv
+      hash: md5
+      md5: c3a52281f98443cff471c16b3e55d2c8
+      size: 2228
+    - path: artifacts/calibration_reliability_curve.png
+      hash: md5
+      md5: 0b116ba373defcaf88b868b6893616ac
+      size: 170072
+    - path: artifacts/conformal_intervals_gradient_boosting.png
+      hash: md5
+      md5: bd99b5d43b202a6f141e818ac8122f37
+      size: 200348
+    - path: artifacts/feature_importance_gradient_boosting.png
+      hash: md5
+      md5: 7eb3dccf75d153e1036b4fb4c3ef0960
+      size: 92417

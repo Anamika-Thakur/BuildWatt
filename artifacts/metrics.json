@@ -1,0 +1,14 @@
+{
+  "heat_champion_r2": 0.9986594758121353,
+  "heat_champion_rmse": 0.36294870622353226,
+  "heat_champion_mae": 0.2781786041650223,
+  "cool_champion_r2": 0.9906015911509987,
+  "cool_champion_rmse": 0.935367356887377,
+  "cool_champion_mae": 0.6614193240510127,
+  "conformal_coverage_90": 91.55844155844156,
+  "conformal_margin_90": 0.6871909928540345,
+  "conformal_width_90": 1.3743819857080695,
+  "conformal_coverage_95": 96.75324675324676,
+  "conformal_margin_95": 0.8820783101475558,
+  "conformal_width_95": 1.7641566202951113
+}

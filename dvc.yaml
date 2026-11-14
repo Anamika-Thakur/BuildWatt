@@ -1,0 +1,48 @@
+stages:
+  prepare:
+    cmd: python src/prepare.py --data-path ENB2012_data.xlsx --output-dir data
+    deps:
+      - ENB2012_data.xlsx
+      - src/prepare.py
+    outs:
+      - data/train.csv
+      - data/cal.csv
+      - data/test.csv
+
+  train:
+    cmd: python src/train.py --train-path data/train.csv --test-path data/test.csv --artifacts-dir artifacts --models-dir models
+    deps:
+      - data/train.csv
+      - data/test.csv
+      - src/train.py
+    outs:
+      - models/champion_gbr_heat.joblib
+      - models/champion_gbr_cool.joblib
+      - artifacts/benchmark_leaderboard.csv:
+          cache: false
+    metrics:
+      - artifacts/metrics.json:
+          cache: false
+    plots:
+      - artifacts/model_comparison_Heating_Load.png:
+          cache: false
+      - artifacts/model_comparison_Cooling_Load.png:
+          cache: false
+
+  calibrate:
+    cmd: python src/calibrate.py --cal-path data/cal.csv --test-path data/test.csv --models-dir models --artifacts-dir artifacts
+    deps:
+      - data/cal.csv
+      - data/test.csv
+      - models/champion_gbr_heat.joblib
+      - src/calibrate.py
+    outs:
+      - artifacts/calibration_curve_metrics.csv:
+          cache: false
+    plots:
+      - artifacts/calibration_reliability_curve.png:
+          cache: false
+      - artifacts/conformal_intervals_gradient_boosting.png:
+          cache: false
+      - artifacts/feature_importance_gradient_boosting.png:
+          cache: false
